@@ -8,6 +8,7 @@ const request = require('request');
 const uri ="mongodb://127.0.0.1:27017/Results";
 const cron = require('cron');
 app.use(express.json())
+// fonction pour la connexion a la base de donnee
 async function connectdb(){
     try{
         await mongoose.connect(uri);
@@ -18,7 +19,7 @@ async function connectdb(){
     }
 }
 connectdb();
-// fonction pour sauveguarder les donnee du gouvernerat de tunis
+// fonction pour sauveguarder les donnee du  ouvernorat de mounastir dans la base de donnee
 function saveMonastir() {
     
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -40,7 +41,7 @@ function saveMonastir() {
         })
     
 }
-//test de l api Nearest Loction
+//test de l api Nearest Loction => (localhost:5000/nloc)
 app.get('/nloc',async(req,res)=>{
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     const url = 'http://api.airvisual.com/v2/nearest_city?key=f6ad6585-59bc-4198-8a61-2b502eca3b6a';
@@ -61,13 +62,14 @@ app.get('/air-quality', async(req,res)=>{
     const{longitude,latitude} = await req.query;
     const apiurl ='https://api.iqair.com/v2/nearest_city?lat=${latitude}&lng=${longitude}&key=f6ad6585-59bc-4198-8a61-2b502eca3b6a';
     
-    request(apiurl , {json:true},(e,res,body)=>{
+    request(apiurl , {json:true},(e,response,body)=>{
         if (e){
             return res.status(500).json({error: e.message});
 
         }else{
-            console.log(apiurl)
+            //visualiser la response dans le console
             console.log(body)
+            // envoyer la resultat sous le format demandee
             res.status(200).json({
                 Result:{
                     Pollution:
@@ -80,4 +82,5 @@ app.get('/air-quality', async(req,res)=>{
 // cron job pour planifier le sauvegaurdage chaque minute 
 const checkMonastirZone =new cron.CronJob('* * * * *',saveMonastir); //* * * * * indique une minute
 checkMonastirZone.start();
+//le serveur va utiliser le port 5000 (index lcalhost:5000 )
 app.listen(5000,()=>{console.log('server working on port 5000')})
