@@ -1,7 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
 function Pollution() {
-    const [airQuality, setAirQuality] = useState({});
+ const [givenCity, setgivenCity] = useState('');   
+  const [airQuality, setAirQuality] = useState({});
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
   // on form submit the fuction fetches the air-quality api based on the values in the input
@@ -46,7 +47,7 @@ function Pollution() {
 </div>
 </div>
 <div class="card bg-light mb-3" style={{maxWidth: "100%", display: "flex", justifyContent: "center"}}>
-<div class="card-header"><h5 style={{display: "flex", justifyContent: "center"}}><b>Pollution rates Monastir</b></h5>
+<div class="card-header"><h5 style={{display: "flex", justifyContent: "center"}}><b>Pollution rates</b></h5>
 </div>
   <div class="card-body">
   {airQuality && airQuality.Result && (
